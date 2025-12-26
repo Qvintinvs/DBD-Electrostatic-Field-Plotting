@@ -1,25 +1,42 @@
+import math
+
 import numpy as np
 import pyvista as pv
+
+MATRICULA = 202210504463
 
 # ------------------------------------------------------------
 # Parâmetros físicos
 # ------------------------------------------------------------
-V0 = 1
-x_factor = 1
-L  = 4
+e_0 = 8.854e-12
+e_g = e_0
+e_d = 5 * e_0
+
+r_a = 13.5e-3
+r_d = 14.8e-3
+r_b = 18e-3
+
+geometric_factor = e_g / (e_g * math.log(r_d / r_a) + e_d * math.log(r_b / r_d))
+
+L = 20e-2
+
+V_0 = 10e3
 
 # ------------------------------------------------------------
 # Geometria do cilindro
 # ------------------------------------------------------------
-R = 1.0
+Δ = 1.5e-2   # espaçamento desejado entre vetores
 
-density = 0.15   # distância mínima entre vetores
+N_r     = int((r_b - r_a) / Δ)
+N_theta = int(2*np.pi * ((r_a+r_b)/2) / Δ)
+N_z     = int(L / Δ)
 
-N_r = int(R / density)
-N_theta = int(2*np.pi*R / density)
-N_z = int(L / (2*density))
+# garantir mínimo
+N_r     = max(N_r, 5)
+N_theta = max(N_theta, 20)
+N_z     = max(N_z, 5)
 
-r     = np.linspace(0, R, N_r)
+r     = np.linspace(r_a, r_b, N_r)
 theta = np.linspace(0, 2*np.pi, N_theta)
 z     = np.linspace(-L/2, L/2, N_z)
 
@@ -32,8 +49,8 @@ x = x.flatten()
 y = y.flatten()
 z = z.flatten()
 
-eps = 1e-6
-mask = np.sqrt(x*x + y*y) > eps
+rv = np.sqrt(x*x + y*y)
+mask = (rv >= r_a) & (rv <= r_b)
 
 x = x[mask]
 y = y[mask]
@@ -47,15 +64,15 @@ r[r == 0] = 1e-12
 
 term1 = (z + L/2) / np.sqrt(r**2 + (z + L/2)**2)
 term2 = (z - L/2) / np.sqrt(r**2 + (z - L/2)**2)
-Er = (V0 * x_factor) / (2 * r) * (term1 - term2)
+Er = (V_0 * geometric_factor) / (2 * r) * (term1 - term2)
 
 # Vetor radial
 Ex = Er * (x / r)
 Ey = Er * (y / r)
 Ez = np.zeros_like(Ex)
 
-vectors = np.vstack([Ex, Ey, Ez]).T
-points  = np.vstack([x, y, z]).T
+vectors = np.vstack((Ex, Ey, Ez)).T
+points  = np.vstack((x, y, z)).T
 
 # ------------------------------------------------------------
 # PREVINIR FLECHAS GIGANTES:
@@ -79,13 +96,13 @@ cloud["mag"] = mag                  # coloração
 glyphs = cloud.glyph(
     orient="vectors",
     scale=False,     # <<--- TAMANHO FIXO
-    factor=0.15,      # <<--- AJUSTE O TAMANHO AQUI
+    factor=Δ * 0.2,       # <<--- AJUSTE O TAMANHO AQUI
 )
 
 plotter.add_mesh(glyphs, scalars="mag", cmap="viridis")
 
 # Cilindro transparente
-cyl = pv.Cylinder(center=(0,0,0), direction=(0,0,1), radius=R, height=L)
+cyl = pv.Cylinder(center=(0,0,0), direction=(0,0,1), radius=r_b, height=L)
 plotter.add_mesh(cyl, color="white", opacity=0.1)
 
 plotter.add_axes()
