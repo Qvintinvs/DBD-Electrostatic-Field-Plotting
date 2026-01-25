@@ -1,6 +1,6 @@
 import numpy as np
 
-from cylinder import Cylinder
+import cylinder
 
 
 class Field:
@@ -22,7 +22,7 @@ class Field:
 
     geometric_factor = eps_g / (eps_g * np.log(r_d / r_a) + eps_d * np.log(r_b / r_d))
 
-    coords = Cylinder()
+    coords = cylinder.CoaxialCylinder(r_a, r_b, L)
 
     def calculate_field(self):
         r, z = self.coords.coordinates

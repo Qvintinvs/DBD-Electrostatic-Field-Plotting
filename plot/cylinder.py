@@ -7,21 +7,20 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Cylinder:
+class CoaxialCylinder:
     """
     Geometria do cilindro
     """
 
-    # placeholders / will be parameterized
+    r_i: float
+    r_o: float
+    L: float
     Δ: float = 1e-2  # espaçamento desejado entre vetores
-    r_a: float = 13.5e-3
-    r_b: float = 18e-3
-    L: float = 20e-2
 
     @cached_property
     def spaced_coordinates(self):
-        N_r = int((self.r_b - self.r_a) / self.Δ)
-        N_theta = int(2 * np.pi * ((self.r_a + self.r_b) / 2) / self.Δ)
+        N_r = int((self.r_o - self.r_i) / self.Δ)
+        N_theta = int(2 * np.pi * ((self.r_i + self.r_o) / 2) / self.Δ)
         N_z = int(self.L / self.Δ)
 
         # garantir mínimo
@@ -29,7 +28,7 @@ class Cylinder:
         N_theta = max(N_theta, 20)
         N_z = max(N_z, 5)
 
-        r = np.linspace(self.r_a, self.r_b, N_r)
+        r = np.linspace(self.r_i, self.r_o, N_r)
         theta = np.linspace(0, 2 * np.pi, N_theta)
         half_L = self.L / 2
         z = np.linspace(-half_L, half_L, N_z)
