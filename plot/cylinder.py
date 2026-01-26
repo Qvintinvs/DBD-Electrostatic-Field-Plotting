@@ -20,18 +20,17 @@ class CoaxialCylinder:
     @cached_property
     def spaced_coordinates(self):
         N_r = int((self.r_o - self.r_i) / self.Δ)
-        N_theta = int(2 * np.pi * ((self.r_i + self.r_o) / 2) / self.Δ)
+        N_theta = int(np.pi * (self.r_i + self.r_o) / self.Δ)
         N_z = int(self.L / self.Δ)
 
-        # garantir mínimo
-        N_r = max(N_r, 5)
-        N_theta = max(N_theta, 20)
-        N_z = max(N_z, 5)
+        N_r_min = max(N_r, 10)
+        N_theta_min = max(N_theta, 20)
+        N_z_min = max(N_z, 5)
 
-        r = np.linspace(self.r_i, self.r_o, N_r)
-        theta = np.linspace(0, 2 * np.pi, N_theta, endpoint=False)
+        r = np.linspace(self.r_i, self.r_o, N_r_min)
+        theta = np.linspace(0, 2 * np.pi, N_theta_min, endpoint=False)
         half_L = self.L / 2
-        z = np.linspace(-half_L, half_L, N_z)
+        z = np.linspace(-half_L, half_L, N_z_min)
 
         return r, theta, z
 
