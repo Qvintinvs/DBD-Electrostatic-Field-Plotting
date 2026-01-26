@@ -28,9 +28,9 @@ class DielectricField:
         """
         Compute electric field and return Cartesian vectors.
         """
-        r_safe, z = self.coords.coordinates
+        r, z = self.coords.rz_coordinates
 
-        r_safe = np.maximum(r_safe, 1e-15)
+        r_safe = np.maximum(r, 1e-15)
 
         half_L = self.L / 2
 

@@ -50,7 +50,7 @@ class CoaxialCylinder:
         return x_f, y_f, z_f
 
     @cached_property
-    def coordinates(self):
+    def rz_coordinates(self):
         x, y, z = self.points
 
         r = np.sqrt(x**2 + y**2)
