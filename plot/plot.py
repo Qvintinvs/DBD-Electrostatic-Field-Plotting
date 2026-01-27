@@ -51,5 +51,21 @@ class Plot:
             scalar_bar_args={"title": "|E| [V/m]"},
         )
 
-        self.plotter.add_axes()
+        AXIS_LENGTH = 101e-3
+
+        x_axis = pv.Line((-AXIS_LENGTH, 0, 0), (AXIS_LENGTH, 0, 0))
+        y_axis = pv.Line((0, -AXIS_LENGTH, 0), (0, AXIS_LENGTH, 0))
+        z_axis = pv.Line((0, 0, -AXIS_LENGTH), (0, 0, AXIS_LENGTH))
+
+        LINE_WIDTH = 1
+
+        self.plotter.add_mesh(x_axis, color="red", line_width=LINE_WIDTH, name="x_axis")
+        self.plotter.add_mesh(
+            y_axis, color="green", line_width=LINE_WIDTH, name="y_axis"
+        )
+        self.plotter.add_mesh(
+            z_axis, color="blue", line_width=LINE_WIDTH, name="z_axis"
+        )
+
+        pv.Plotter.add_axes(self.plotter)
         self.plotter.show()
