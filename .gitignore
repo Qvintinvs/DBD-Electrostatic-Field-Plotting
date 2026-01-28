@@ -1,0 +1,25 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+
+# Ruff / isort / cache geral
+.cache/
+
+# PyVista (generated in runtime)
+*.vtk
+*.vtp
+*.vti
+*.vtr
+*.vtu
+*.ply
+
+# Logs
+*.log
