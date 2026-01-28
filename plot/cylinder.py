@@ -117,7 +117,7 @@ class CoaxialCylinder:
 
         x, y, z = self.points
 
-        r: np.typing.NDArray[np.float64] = np.sqrt(x**2 + y**2)
+        r: NDArray[float64] = np.sqrt(x**2 + y**2)
 
         return r, z
 

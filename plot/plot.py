@@ -51,7 +51,7 @@ class Plot:
             scalar_bar_args={"title": "|E| [V/m]"},
         )
 
-        AXIS_LENGTH = 101e-3
+        AXIS_LENGTH = 101e-3  # L / 2 + delta
 
         x_axis = pv.Line((-AXIS_LENGTH, 0, 0), (AXIS_LENGTH, 0, 0))
         y_axis = pv.Line((0, -AXIS_LENGTH, 0), (0, AXIS_LENGTH, 0))
