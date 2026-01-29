@@ -45,6 +45,18 @@ permittivity ratios.
 ├── main.py
 ```
 
+- `cylinder.py` contains the geometric description and coordinate discretization
+  of the coaxial system, independent of any physical model.
+- `field.py` implements the electric field computation and physical logic,
+  using the geometry provided by the cylindrical grid.
+- `plot.py` handles visualization and rendering of the electric field using
+  PyVista, without embedding physical assumptions.
+- `main.py` serves as the entry point, connecting the physical model to the
+  visualization layer.
+
+This separation between geometry, physical modeling, and visualization improves
+clarity, reusability, and extensibility of the code.
+
 ---
 
 ## Installation
