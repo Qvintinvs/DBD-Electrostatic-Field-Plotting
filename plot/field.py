@@ -96,7 +96,7 @@ class DielectricField:
         )
 
         # Dielectric correction (field scaling by permittivity ratio)
-        mask_diel = r_safe >= self.r_d
+        mask_diel = (r >= self.r_d) & (r <= self.r_b)
         factor_diel = self.eps_d / self.eps_g
 
         Er_diel = np.where(mask_diel, Er * factor_diel, Er)
