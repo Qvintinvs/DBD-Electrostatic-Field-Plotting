@@ -6,6 +6,7 @@ Description:
 """
 
 import math
+from dataclasses import dataclass
 from enum import IntEnum, auto
 
 import numpy as np
@@ -27,6 +28,7 @@ class Region(IntEnum):
     DIELECTRIC = auto()
 
 
+@dataclass(frozen=True)
 class DielectricField:
     """
     Electric field model for a finite-length coaxial cylinder with a dielectric layer.

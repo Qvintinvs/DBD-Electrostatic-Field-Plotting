@@ -32,7 +32,7 @@ class CartesianField(NamedTuple):
     magnitude: NDArray[float64]
 
 
-@dataclass
+@dataclass(frozen=True)
 class CoaxialCylinder:
     """
     Representation of a coaxial cylindrical geometry with discretized coordinates.
