@@ -69,8 +69,8 @@ class DielectricField:
         superposition of two finite line charges.
 
         The field is first calculated in cylindrical coordinates (Er, Ez),
-        corrected inside the dielectric region, and then converted to
-        Cartesian coordinates.
+        corrected inside the gas region, and then converted to Cartesian
+        coordinates.
 
         Returns
         -------
@@ -97,14 +97,15 @@ class DielectricField:
         Er = self.V_0 * self.geometric_factor * axial_factor / r
         Ez = self.V_0 * self.geometric_factor * (1 / rm - 1 / rp)
 
-        # Dielectric correction (field scaling by permittivity ratio)
-        mask_diel = (r >= self.r_d) & (r <= self.r_b)
-        factor_diel = self.eps_d / self.eps_g
+        # Permittivity-jump correction derived from boundary conditions.
+        # NOTE: This applies in the gas region due to ε-discontinuity at r = r_d.
+        mask_eps_jump = (r >= self.r_d) & (r <= self.r_b)
+        scale_eps = self.eps_d / self.eps_g
 
-        Er_diel = np.where(mask_diel, Er * factor_diel, Er)
-        Ez_diel = np.where(mask_diel, Ez * factor_diel, Ez)
+        Er_corr = np.where(mask_eps_jump, Er * scale_eps, Er)
+        Ez_corr = np.where(mask_eps_jump, Ez * scale_eps, Ez)
 
-        return self.coords.to_cartesian(Er_diel, Ez_diel)
+        return self.coords.to_cartesian(Er_corr, Ez_corr)
 
     def mean_radial_error(self):
         """
