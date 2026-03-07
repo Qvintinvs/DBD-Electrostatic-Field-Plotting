@@ -4,6 +4,7 @@ Description:
     Geometry and coordinate utilities for coaxial cylindrical simulations.
 """
 
+import math
 from dataclasses import dataclass
 from functools import cached_property
 from typing import NamedTuple
@@ -82,20 +83,15 @@ class CoaxialCylinder:
         """
 
         # Estimated number of samples
-        N_r = int((self.r_o - self.r_i) / self.Δ)
-        N_theta = int(np.pi * (self.r_i + self.r_o) / self.Δ)
-        N_z = int(self.L / self.Δ)
+        N_r = max(math.ceil((self.r_o - self.r_i) / self.Δ), 10)
+        N_z = max(math.ceil(self.L / self.Δ), 5)
+        N_theta = max(math.ceil(2 * np.pi * self.r_o / self.Δ), 20)
 
-        # Enforce minimum resolution
-        N_r_min = max(N_r, 10)
-        N_theta_min = max(N_theta, 20)
-        N_z_min = max(N_z, 5)
-
-        r = np.linspace(self.r_i, self.r_o, N_r_min)
-        theta = np.linspace(0, 2 * np.pi, N_theta_min, endpoint=False)
+        r = np.linspace(self.r_i, self.r_o, N_r)
+        theta = np.linspace(0, 2 * np.pi, N_theta, endpoint=False)
 
         half_L = self.L / 2
-        z = np.linspace(-half_L, half_L, N_z_min)
+        z = np.linspace(-half_L, half_L, N_z)
 
         return r, theta, z
 
