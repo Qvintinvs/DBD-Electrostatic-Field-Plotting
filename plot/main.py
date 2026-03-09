@@ -4,7 +4,7 @@ import plot
 def main():
     plt = plot.PlotBuilder()
 
-    plt.set_isometric_z_right()
+    plt.enable_parallel_projection_y_up()
 
     plt.add_error_text()
     plt.add_glyphs()

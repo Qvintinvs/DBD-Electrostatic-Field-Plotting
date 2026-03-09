@@ -155,22 +155,18 @@ class PlotBuilder:
             color="black",
         )
 
-    def set_isometric_z_right(self):
+    def enable_parallel_projection_y_up(self):
         """
-        Set an isometric view where the physical Z axis points to the right
-        on the screen.
+        Enable parallel projection and set the camera up direction to +Y.
+
+        This configures the camera so that the vertical direction on screen
+        corresponds to the positive Y axis.
         """
 
         pv.Plotter.enable_parallel_projection(self.plotter)
 
-        cam = self.plotter.camera
-
-        # Camera looks diagonally at the origin
-        cam.focal_point = (0, 0, 0)
-        cam.position = (1, -1, 1)
-
         # Screen-up is +Y, so screen-right becomes +Z
-        cam.up = (0, 1, 0)
+        self.plotter.camera.up = (0, 1, 0)
 
     def auto_zoom(self, margin=1.2):
         """
