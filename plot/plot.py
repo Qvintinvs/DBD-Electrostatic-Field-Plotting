@@ -116,25 +116,25 @@ class PlotBuilder:
 
         Axes are centered at the origin and colored according to the
         standard convention:
-        x-axis (red), y-axis (green), z-axis (blue).
+        x-axis (orange), y-axis (green), z-axis (blue).
         """
 
-        axis_length = np.max(np.abs(self.cloud.points))
+        axis_length = np.max(np.abs(self.cloud.points)) + self.glyph_size
 
-        x_axis = pv.Line((-axis_length, 0, 0), (axis_length, 0, 0))
-        y_axis = pv.Line((0, -axis_length, 0), (0, axis_length, 0))
-        z_axis = pv.Line((0, 0, -axis_length), (0, 0, axis_length))
+        axes = pv.AxesActor()
 
-        self.plotter.add_mesh(
-            x_axis, color="red", line_width=self.LINE_WIDTH, name="x_axis"
-        )
-        self.plotter.add_mesh(
-            y_axis, color="green", line_width=self.LINE_WIDTH, name="y_axis"
-        )
-        self.plotter.add_mesh(
-            z_axis, color="blue", line_width=self.LINE_WIDTH, name="z_axis"
-        )
+        axes.tip_length = 2e-2
+        axes.shaft_length = 98e-2
+        axes.total_length = axis_length
 
+        axes.GetXAxisShaftProperty().SetLineWidth(self.LINE_WIDTH)
+        axes.GetYAxisShaftProperty().SetLineWidth(self.LINE_WIDTH)
+        axes.GetZAxisShaftProperty().SetLineWidth(self.LINE_WIDTH)
+
+        axes.SetConeRadius(2e-1)
+        axes.SetAxisLabels(False)
+
+        pv.Plotter.add_actor(self.plotter, axes)
         pv.Plotter.add_axes(self.plotter)
 
     def add_error_text(self):
