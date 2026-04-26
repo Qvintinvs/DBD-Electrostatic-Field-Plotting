@@ -5,6 +5,7 @@ Description:
     dielectric cylinder using PyVista.
 """
 
+import logging
 from functools import cached_property
 
 import numpy as np
@@ -214,4 +215,4 @@ class PlotBuilder:
 
         self.plotter.screenshot(filename, transparent_background=transparent)
 
-        print(f"Saved electric field plot to '{filename}'")
+        logging.info("Saved electric field plot to '%s'", filename)
